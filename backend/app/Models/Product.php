@@ -19,14 +19,18 @@ class Product extends Model
 
     /**
      * Отношение с user, многим ко многим
+     *
+     * @return BelongsToMany
      */
     public function favoritesBy(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_favorites_products', 'product_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_favorite_product', 'product_id', 'user_id');
     }
 
     /**
      * Отношение с user, многим ко многим
+     *
+     * @return BelongsToMany
      */
     public function cartsBy(): BelongsToMany
     {
@@ -35,6 +39,8 @@ class Product extends Model
 
     /**
      * Отношение с order, один ко многим
+     *
+     * @return HasMany
      */
     public function orders(): HasMany
     {

@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class ProductProductsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -52,14 +52,18 @@ class User extends Authenticatable
 
     /**
      * Отношение с product, многим ко многим
+     *
+     * @return BelongsToMany
      */
     public function favorites(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'user_favorites_products', 'user_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'user_favorite_product', 'user_id', 'product_id');
     }
 
     /**
      * Отношение с product, многим ко многим
+     *
+     * @return BelongsToMany
      */
     public function carts(): BelongsToMany
     {
@@ -68,6 +72,8 @@ class User extends Authenticatable
 
     /**
      * Отношени с order, один ко многи
+     *
+     * @return HasMany
      */
     public function orders(): HasMany
     {

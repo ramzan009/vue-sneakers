@@ -8,18 +8,14 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import axios from 'axios'
 import CardList from '@/components/CardList.vue'
+import { getAllFavorites } from '@/api/favorite.js'
 
 const favorites = ref([])
 
 onMounted(async () => {
   try {
-    const { data } = await axios.get('http://localhost:8000/api/favorites', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    const { data } = await getAllFavorites()
 
     favorites.value = data
   } catch (err) {

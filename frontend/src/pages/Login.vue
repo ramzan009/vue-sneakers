@@ -48,8 +48,8 @@
 
 <script setup>
 import { reactive } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { loginRequest, setToken } from '@/api/auth.js'
 
 const router = useRouter()
 
@@ -72,17 +72,11 @@ const login = async () => {
   if (errors.email || errors.password) return
 
   try {
-    const response = await axios.post('http://localhost:8000/api/login', {
-      email: user.email.trim(),
-      password: user.password.trim(),
-    })
+    const { data } = await loginRequest(user)
 
-    const data = response.data
+    setToken(data.token)
 
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('isAuth', 'true')
-
-    router.push('/app')
+    router.push('/')
   } catch (err) {
     if (err.response && err.response.status === 401) {
       errors.email = 'Неверная почта или пароль'

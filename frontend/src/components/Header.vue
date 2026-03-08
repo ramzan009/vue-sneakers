@@ -34,17 +34,17 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { removeToken } from '@/api/auth.js'
+
+const emit = defineEmits(['openDrawer'])
+const router = useRouter()
+
+const logout = () => {
+  removeToken()
+  router.push('/login')
+}
 
 defineProps({
   totalPrice: Number,
 })
-
-const emit = defineEmits(['openDrawer'])
-
-const router = useRouter()
-
-const logout = () => {
-  localStorage.removeItem('isAuth')
-  router.push('/login')
-}
 </script>

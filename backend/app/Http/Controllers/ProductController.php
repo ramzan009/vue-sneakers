@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductProductsRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductController extends Controller
 {
     /**
      * Метод выводить все товары
      * И там есть код для фильтра и поиска
+     *
+     * @param ProductProductsRequest $request
+     * @return Collection
      */
-    public function products(Request $request)
+    public function products(ProductProductsRequest $request): Collection
     {
         $query = Product::query();
 

@@ -4,18 +4,18 @@
     <DrawerHead />
 
     <div v-if="!totalPrice || orderId" class="flex h-full items-center">
-      <infoBlock
+      <InfoBlock
         v-if="totalPrice && !orderId"
         title="Корзина пустая"
         description="Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ"
         imageUrl="/package-icon.png"
-      ></infoBlock>
-      <infoBlock
+      ></InfoBlock>
+      <InfoBlock
         v-if="orderId"
         title="Заказ оформлен!"
         :description="`Ваш заказ #${orderId} скоро будет передан курьерской доставке`"
         imageUrl="/order-success-icon.png"
-      ></infoBlock>
+      ></InfoBlock>
     </div>
 
     <CartItemList />
@@ -47,9 +47,11 @@
 <script setup>
 import DrawerHead from '@/components/DrawerHead.vue'
 import CartItemList from '@/components/CartItemList.vue'
-import InfoBlock from '@/components/infoBlock.vue'
+import InfoBlock from '@/components/InfoBlock.vue'
 import { inject, ref, computed, onMounted } from 'vue'
 import axios from 'axios'
+import { getAuthHeaders, getUrl } from '@/utils/utils.js'
+import { getAllCarts } from '@/api/cart.js'
 
 const props = defineProps({
   totalPrice: Number,
@@ -62,21 +64,21 @@ const { cart } = inject('cart')
 
 const orderId = ref(null)
 
+const cartIsEmpty = computed(() => cart.value.length === 0)
+
+const buttonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
+
 const createOrder = async () => {
   try {
     isCreating.value = true
 
     const { data } = await axios.post(
-      'http://localhost:8000/api/order',
+      `${getUrl()}/order`,
       {
         items: cart.value,
         totalPrice: props.totalPrice.value,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      },
+      getAuthHeaders(),
     )
 
     orderId.value = data.order_id
@@ -90,13 +92,9 @@ const createOrder = async () => {
 
 const loadCart = async () => {
   try {
-    const { data } = await axios.get('http://localhost:8000/api/cart', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    const { data } = await getAllCarts()
 
-    cart.value = data.map((item) => ({
+    cart.value = data.data.map((item) => ({
       ...item,
       isAdded: true,
     }))
@@ -106,10 +104,5 @@ const loadCart = async () => {
 }
 
 onMounted(loadCart)
-
-const cartIsEmpty = computed(() => cart.value.length === 0)
-
-const buttonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
 </script>
 
-<style scoped></style>

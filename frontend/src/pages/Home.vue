@@ -32,9 +32,12 @@
 
 <script setup>
 import CardList from '@/components/CardList.vue'
-import axios from 'axios'
 import { inject, onMounted, watch } from 'vue'
 import { reactive, ref } from 'vue'
+import { addToFavorites, getAllFavorites } from '@/api/favorite.js'
+import { getAllProducts } from '@/api/product.js'
+import { getAllCarts } from '@/api/cart.js'
+import { addToCarts } from '@/api/drawer.js'
 
 const items = ref([])
 
@@ -47,11 +50,7 @@ const filters = reactive({
 
 const addToFavorite = async (item) => {
   try {
-    const { data } = await axios.post(`http://localhost:8000/api/favorites/${item.id}`, null, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    const { data } = await addToFavorites(item)
 
     item.isFavorite = data.favorited
   } catch (err) {
@@ -69,10 +68,7 @@ const fetchItems = async () => {
       params.title = `*${filters.searchQuery}*`
     }
 
-    const { data } = await axios.get(`http://localhost:8000/api/product`, {
-      params,
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    })
+    const { data } = await getAllProducts(params)
 
     items.value = data.map((obj) => ({
       ...obj,
@@ -86,11 +82,7 @@ const fetchItems = async () => {
 
 const fetchFavorites = async () => {
   try {
-    const { data } = await axios.get('http://localhost:8000/api/favorites', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    const { data } = await getAllFavorites()
 
     items.value = items.value.map((item) => ({
       ...item,
@@ -103,13 +95,9 @@ const fetchFavorites = async () => {
 
 const loadCart = async () => {
   try {
-    const { data } = await axios.get('http://localhost:8000/api/cart', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    const { data } = await getAllCarts()
 
-    cart.value = data.map((item) => ({
+    cart.value = data.data.map((item) => ({
       ...item,
       isAdded: true,
     }))
@@ -136,11 +124,7 @@ const onChangeSearchInput = (event) => {
 const onClickAddPlus = async (item) => {
   if (item.isAdded) return
   try {
-    await axios.post(`http://localhost:8000/api/cart/${item.id}`, null, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    await addToCarts(item)
 
     item.isAdded = true
     cart.value.push(item)

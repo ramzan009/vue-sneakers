@@ -71,8 +71,8 @@
 
 <script setup>
 import { reactive } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { registerRequest, setToken } from '@/api/auth.js'
 
 const router = useRouter()
 
@@ -125,16 +125,11 @@ const register = async () => {
   }
 
   try {
-    const response = await axios.post('http://localhost:8000/api/register', {
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    })
+    const { data } = await registerRequest(user)
 
-    localStorage.setItem('token', response.data.token)
-    localStorage.setItem('isAuth', 'true')
+    setToken(data.token)
 
-    router.push('/app')
+    router.push('/')
   } catch (err) {
     if (err.response && err.response.data) {
       console.log(err.response.data)

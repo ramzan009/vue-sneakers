@@ -10,7 +10,7 @@
 defineProps({
   title: String,
   description: String,
-  imageUrl: String
+  imageUrl: String,
 })
 </script>
 

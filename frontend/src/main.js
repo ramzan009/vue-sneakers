@@ -10,15 +10,11 @@ import Favorites from '@/pages/Favorites.vue'
 import Login from '@/pages/Login.vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import Register from '@/pages/Register.vue'
+import { getToken } from '@/api/auth.js'
 
 const app = createApp(App)
 
 const routes = [
-  {
-    path: '/',
-    redirect: '/login',
-  },
-
   {
     path: '/login',
     name: 'Login',
@@ -32,7 +28,7 @@ const routes = [
   },
 
   {
-    path: '/app',
+    path: '/',
     component: MainLayout,
     meta: { requiresAuth: true },
     children: [
@@ -56,9 +52,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const isAuth = localStorage.getItem('isAuth')
+  const token = getToken()
 
-  if (to.meta.requiresAuth && !isAuth) {
+  if (to.meta.requiresAuth && !token) {
     return '/login'
   }
 })

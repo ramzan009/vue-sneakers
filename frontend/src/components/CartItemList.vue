@@ -13,7 +13,7 @@
 
 <script setup>
 import CartItem from '@/components/CartItem.vue'
-import { inject, } from 'vue'
+import { inject } from 'vue'
 
 const { cart, removeFromCart } = inject('cart')
 </script>

@@ -14,7 +14,7 @@
 import Header from '@/components/Header.vue'
 import { computed, provide, ref, onMounted } from 'vue'
 import Drawer from '@/components/Drawer.vue'
-import axios from 'axios'
+import { getAllCarts, removeCarts } from '@/api/cart.js'
 
 /** Корзина **/
 const cart = ref([])
@@ -34,11 +34,7 @@ const openDrawer = () => {
 
 const removeFromCart = async (item) => {
   try {
-    await axios.delete(`http://localhost:8000/api/cart/${item.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    await removeCarts(item)
 
     cart.value = cart.value.filter((cartItem) => cartItem.id !== item.id)
 
@@ -50,11 +46,7 @@ const removeFromCart = async (item) => {
 
 const fetchCart = async () => {
   try {
-    const { data } = await axios.get('http://localhost:8000/api/cart', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    const { data } = await getAllCarts()
 
     cart.value = data.carts.map((item) => ({
       ...item,

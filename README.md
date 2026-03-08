@@ -17,7 +17,11 @@ git clone git@github.com:ramzan009/vue-sneakers.git
 Устанавливаем зависимости:
 
 ```shell
+cd backend
 composer install --dev
+cp .env.example .env
+php artisan key:generate
+php artisan storage:link
 ```
 
 ## Запуск миграции
@@ -25,6 +29,7 @@ composer install --dev
 Запускаем миграции:
 
 ```shell
+cd backend
 php artisan migrate
 ```
 
@@ -34,6 +39,7 @@ php artisan migrate
 
 Запускаем сидов:
 ```shell
+cd backend
 php artisan db:seed --class=ProductSeeder
 ```
 
@@ -41,9 +47,14 @@ php artisan db:seed --class=ProductSeeder
 ## Как открыть проект в браузере
 
 ```shell
-npm run build
+cd frontend
+npm install
+npm run dev
 ```
 
 ```shell
+cd backend
 php artisan serve
 ```
+
+Открываем по адресу   http://localhost:5173/

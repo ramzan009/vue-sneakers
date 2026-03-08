@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
     /**
      * Метод выводить избранные товары
+     *
+     * @return JsonResponse
      */
     public function index()
     {
@@ -22,6 +25,9 @@ class FavoriteController extends Controller
 
     /**
      * Метод добавляет товар в избранный
+     *
+     * @param Product $product
+     * @return JsonResponse
      */
     public function toggle(Product $product)
     {

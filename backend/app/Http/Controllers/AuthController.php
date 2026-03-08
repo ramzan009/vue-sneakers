@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
     /**
-     * Метод для регистрация
+     * Метод для регистрации
+     *
+     * @param StoreUserRequest $request
+     * @return JsonResponse
      */
     public function register(StoreUserRequest $request)
     {
@@ -30,6 +33,9 @@ class AuthController extends Controller
 
     /**
      * Метод для входа
+     *
+     * @param LoginUserRequest $request
+     * @return JsonResponse
      */
     public function login(LoginUserRequest $request)
     {
@@ -49,6 +55,8 @@ class AuthController extends Controller
 
     /**
      * Метод для выхода из аккаунта
+     *
+     * @return JsonResponse
      */
     public function logout()
     {

@@ -17,7 +17,9 @@ class Order extends Model
     ];
 
     /**
-     * Отношени с user, один ко многи
+     * Связь с пользователем (заказ принадлежит пользователю)
+     *
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -26,6 +28,8 @@ class Order extends Model
 
     /**
      * Связь с product, один ко многим
+     *
+     * @return BelongsTo
      */
     public function product(): BelongsTo
     {
